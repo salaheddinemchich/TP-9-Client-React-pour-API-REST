@@ -8,7 +8,7 @@ function App() {
     <div className="app-wrapper">
       <header className="app-header">
         <div className="header-content">
-          <h1 className="app-title">💳 Gestion Bancaire</h1>
+          <h1 className="app-title">💳 Gestion Bancaire - 2025 </h1>
           <p className="app-subtitle">Système de gestion des comptes</p>
         </div>
       </header>
