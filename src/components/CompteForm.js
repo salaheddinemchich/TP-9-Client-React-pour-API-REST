@@ -1,86 +1,97 @@
 import API_BASE_URL from '../config';
 import React, { useState } from 'react';
 import axios from 'axios';
+import './CompteForm.css';
 
 function CompteForm() {
-  // État local du formulaire
-  const [compte, setCompte] = useState({
+  const [formData, setFormData] = useState({
     solde: '',
     dateCreation: '',
     type: 'COURANT',
   });
 
-  // Gérer la saisie utilisateur
-  const handleChange = (e) => {
-    setCompte({ ...compte, [e.target.name]: e.target.value });
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Soumettre le formulaire
-  const handleSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    // ✅ Préparer les données correctement typées
-    const dataToSend = {
-      solde: parseFloat(compte.solde), // convertir en nombre
-      dateCreation: compte.dateCreation, // format ISO (OK pour Spring)
-      type: compte.type.toUpperCase(), // en majuscules pour matcher l'enum
+    const payload = {
+      solde: parseFloat(formData.solde),
+      dateCreation: formData.dateCreation,
+      type: formData.type.toUpperCase(),
     };
 
     axios
-      .post(`${API_BASE_URL}/comptes`, dataToSend, {
+      .post(`${API_BASE_URL}/comptes`, payload, {
         headers: { 'Content-Type': 'application/json' },
       })
       .then(() => {
         alert('✅ Compte ajouté avec succès !');
-        window.location.reload(); // recharge la liste
+        window.location.reload();
       })
       .catch((error) => {
-        console.error('❌ Erreur lors de l’ajout du compte :', error);
-        alert('Erreur : impossible d’ajouter le compte');
+        console.error("❌ Erreur lors de l'ajout du compte :", error);
+        alert("Erreur : impossible d'ajouter le compte");
       });
   };
 
   return (
-    <div className="container mt-4">
-      <h2>Ajouter un Compte</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label>Solde</label>
+    <div className="form-card">
+      <div className="form-card-header">
+        <h2 className="form-title">✨ Nouveau Compte</h2>
+        <p className="form-description">Créer un nouveau compte bancaire</p>
+      </div>
+      <form onSubmit={handleFormSubmit} className="account-form">
+        <div className="form-group">
+          <label className="form-label">
+            <span className="label-icon">💰</span>
+            Montant du Solde
+          </label>
           <input
             type="number"
             name="solde"
-            className="form-control"
-            onChange={handleChange}
+            className="form-input"
+            onChange={handleInputChange}
+            placeholder="Entrez le montant"
             required
           />
         </div>
 
-        <div className="mb-3">
-          <label>Date de Création</label>
+        <div className="form-group">
+          <label className="form-label">
+            <span className="label-icon">📅</span>
+            Date de Création
+          </label>
           <input
             type="date"
             name="dateCreation"
-            className="form-control"
-            onChange={handleChange}
+            className="form-input"
+            onChange={handleInputChange}
             required
           />
         </div>
 
-        <div className="mb-3">
-          <label>Type</label>
+        <div className="form-group">
+          <label className="form-label">
+            <span className="label-icon">🏦</span>
+            Type de Compte
+          </label>
           <select
             name="type"
             className="form-select"
-            onChange={handleChange}
+            onChange={handleInputChange}
             required
           >
-            <option value="COURANT">Courant</option>
-            <option value="EPARGNE">Épargne</option>
+            <option value="COURANT">Compte Courant</option>
+            <option value="EPARGNE">Compte Épargne</option>
           </select>
         </div>
 
-        <button type="submit" className="btn btn-primary">
-          Ajouter
+        <button type="submit" className="submit-button">
+          <span className="button-text">Créer le Compte</span>
+          <span className="button-icon">→</span>
         </button>
       </form>
     </div>
